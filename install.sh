@@ -8,6 +8,8 @@ USER="$(whoami)"
 PYTHON_PATH="$(which python3)"
 USER_HOME=$(eval echo ~$USER)  # Diretório home do usuário
 LOG_DIR="$(dirname "$(realpath "$0")")/service_logs"  # Diretório para os arquivos de log e info
+LOG_FILE_STDOUT="$LOG_DIR/script_log.txt"
+LOG_FILE_STDERR="$LOG_DIR/error_log.txt"
 
 # Função para exibir mensagens de erro e sair
 error_exit() {
@@ -31,6 +33,12 @@ if [ ! -d "$LOG_DIR" ]; then
     chmod 777 "$LOG_DIR"  # Permissão total para todos os usuários
 fi
 
+# Cria arquivos de log vazios
+touch "$LOG_FILE_STDOUT" "$LOG_FILE_STDERR"
+
+# Define permissões para os arquivos de log
+chmod 777 "$LOG_FILE_STDOUT" "$LOG_FILE_STDERR"  # Permissão de leitura e escrita para todos os usuários
+
 # Cria o arquivo de serviço
 echo "Criando o arquivo de serviço systemd..."
 
@@ -45,8 +53,8 @@ ExecStart=${PYTHON_PATH} $SCRIPT_PATH
 Restart=on-failure
 User=$USER
 WorkingDirectory=$LOG_DIR
-StandardOutput=file:$LOG_DIR/script_log.txt
-StandardError=file:$LOG_DIR/error_log.txt
+StandardOutput=file:$LOG_FILE_STDOUT
+StandardError=file:$LOG_FILE_STDERR
 
 [Install]
 WantedBy=multi-user.target

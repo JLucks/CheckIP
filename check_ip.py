@@ -7,10 +7,27 @@ from email.mime.multipart import MIMEMultipart
 
 # Obtém o diretório onde o script está localizado
 script_dir = os.path.dirname(os.path.abspath(__file__))
+log_dir = os.path.join(script_dir, 'service_logs')
+
+# Função para garantir a criação dos diretórios e arquivos de log com permissões apropriadas
+def setup_logging_dir_and_files():
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir, mode=0o777)  # Cria o diretório com permissões para todos os usuários
+    
+    log_file_stdout = os.path.join(log_dir, 'script_log.txt')
+    log_file_stderr = os.path.join(log_dir, 'error_log.txt')
+
+    for file_path in [log_file_stdout, log_file_stderr]:
+        if not os.path.exists(file_path):
+            with open(file_path, 'w') as f:
+                pass  # Cria o arquivo vazio
+            os.chmod(file_path, 0o777)  # Define permissões para todos os usuários
 
 # Configuração do logger
+setup_logging_dir_and_files()
+
 logging.basicConfig(
-    filename=os.path.join(script_dir, 'service_logs', 'script_log.txt'),
+    filename=os.path.join(log_dir, 'script_log.txt'),
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -149,7 +166,7 @@ def save_info_to_file(filename, content):
         with open(file_path, 'w') as file:
             file.write(content)
         # Define permissões para todos os usuários
-        os.chmod(file_path, 0o666)
+        os.chmod(file_path, 0o777)
     except Exception as e:
         logging.error(f"Erro ao salvar o arquivo '{file_path}': {e}")
 
