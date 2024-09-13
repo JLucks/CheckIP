@@ -1,0 +1,8 @@
+# ignore logs
+service_logs/
+
+# ignore config
+email_config.txt
+
+# ignore result
+machine_info.txt
