@@ -1,0 +1,3 @@
+EMAIL_USER=emaildohost@gmail.com
+EMAIL_PASSWORD=senhadohost@gmail.com
+EMAIL_TO=seuemail@gmail.com
