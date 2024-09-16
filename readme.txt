@@ -11,6 +11,6 @@ chmod +x install.sh
 Execute o script como root:
 sudo ./install.sh
 
-Para instalação no sistema operacional linux:
+Para instalação no sistema operacional windows:
 Clique com o botão direito no arquivo install.bat e selecione Executar como administrador.
 *O Python deve estar corretamente configurado no PATH do sistema, caso contrario especifique no TASK_COMMAND o caminho absoluto.
